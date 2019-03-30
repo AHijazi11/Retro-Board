@@ -1,0 +1,12 @@
+input {
+  border: 0;
+  background: transparent;
+}
+
+.Rotate-1 {
+  transform: rotate(-90deg);
+}
+
+.Rotate-2 {
+  transform: rotate(90deg);
+}

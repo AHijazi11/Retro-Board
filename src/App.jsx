@@ -4,7 +4,7 @@ import Notes from "./Notes";
 
 function Note(props) {
   return (
-    <div>
+    <div className={"card mt-1 mb-2 mr-1 ml-1 " + props.color}>
       <br />
       <input
         type="text"
@@ -15,21 +15,42 @@ function Note(props) {
         onBlur={props.validateInput}
       />
       <br />
-      <button
-        onClick={() => {
-          props.MoveLeft(props.identifier);
-        }}
-      >
-        &larr;
-      </button>
-      <button onClick={() => props.Delete(props.identifier)}>x</button>
-      <button
-        onClick={() => {
-          props.MoveRight(props.identifier);
-        }}
-      >
-        &rarr;
-      </button>
+      <div className="Text-center">
+        <div className="btn-group" role="group" aria-label="Basic example">
+          <i
+            className={
+              "fa fa-arrow-left float-left btn " +
+              (props.Layouttoggle && " Rotate-2")
+            }
+            onClick={() => {
+              props.MoveLeft(props.identifier, props.idx);
+            }}
+          />
+          <i
+            className="fa fa-thumbs-up btn"
+            onClick={() => props.Thumbsup(props.idx)}
+          />
+          {props.thumbsupcount}
+          <i
+            className="fa fa-trash btn"
+            onClick={() => props.Delete(props.identifier)}
+          />
+          <i
+            className="fa fa-thumbs-down btn"
+            onClick={() => props.Thumbsdown(props.idx)}
+          />
+          {props.thumbsdowncount}
+          <i
+            className={
+              "fa fa-arrow-right float-right btn " +
+              (props.Layouttoggle && " Rotate-2")
+            }
+            onClick={() => {
+              props.MoveRight(props.identifier, props.idx);
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -37,6 +58,7 @@ function Note(props) {
 class App extends Component {
   state = {
     id: 6,
+    Layouttoggle: 0,
     Notes: Notes
   };
 
@@ -46,7 +68,6 @@ class App extends Component {
     this.setState({
       Notes: DummyNotes
     });
-    console.log(this.state, e.target.value, this.state.Notes[idx].input);
   };
 
   validateInput = e => {
@@ -64,12 +85,18 @@ class App extends Component {
     this.setState({
       Notes: [
         ...this.state.Notes,
-        { id: this.state.id, type: type, input: input }
+        {
+          id: this.state.id,
+          type: type,
+          input: input,
+          thumbsup: 0,
+          thumbsdown: 0
+        }
       ],
       id: this.state.id + 1
     });
 
-  MoveLeft = id => {
+  MoveLeft = (id, idx) => {
     let DummyNotes = [...this.state.Notes];
     for (let note of DummyNotes) {
       if (note.id === id && note.type === "Went Well") {
@@ -80,10 +107,12 @@ class App extends Component {
         note.type = "To Improve";
       }
     }
+    DummyNotes.push(DummyNotes[idx]); //This and one line below to render moved card at bottom of destination column
+    DummyNotes.splice(idx, 1);
     this.setState({ Notes: DummyNotes });
   };
 
-  MoveRight = id => {
+  MoveRight = (id, idx) => {
     let DummyNotes = [...this.state.Notes];
     for (let note of DummyNotes) {
       if (note.id === id && note.type === "Went Well") {
@@ -94,24 +123,76 @@ class App extends Component {
         note.type = "Went Well";
       }
     }
+    DummyNotes.push(DummyNotes[idx]); //This and one line below to render moved card at bottom of destination column
+    DummyNotes.splice(idx, 1);
     this.setState({ Notes: DummyNotes });
+  };
+
+  Thumbsup = idx => {
+    let DummyNotes = [...this.state.Notes];
+    DummyNotes[idx].thumbsup++;
+    this.setState({
+      Notes: DummyNotes
+    });
+  };
+
+  Thumbsdown = idx => {
+    let DummyNotes = [...this.state.Notes];
+    DummyNotes[idx].thumbsdown--;
+    this.setState({
+      Notes: DummyNotes
+    });
+  };
+
+  ToggleLayout = () => {
+    if (this.state.Layouttoggle === 2) {
+      this.setState({ Layouttoggle: 0 });
+    } else {
+      this.setState({ Layouttoggle: this.state.Layouttoggle + 1 });
+    }
   };
   render() {
     return (
       <div>
+        <h2 className="text-center text-primary">
+          Retro Board
+          <button
+            type="button"
+            className="btn btn-primary float-right"
+            onClick={() => {
+              this.ToggleLayout();
+            }}
+          >
+            Layout Toggle
+          </button>
+        </h2>
         <br />
-        <br />
-        <div className="container text-center">
-          <div className="row">
-            <div className="col-sm">
-              <h2>Went Well</h2>
-              <button
-                type="button"
-                className="btn btn-primary btn-lg"
-                onClick={() => this.CreateNote("Went Well", "")}
+        <div className="text-center">
+          <div
+            className={
+              this.state.Layouttoggle === 1
+                ? "col"
+                : this.state.Layouttoggle === 2
+                ? "col"
+                : "row"
+            }
+          >
+            <div className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}>
+              <div
+                className={(this.state.Layouttoggle === 1
+                  ? " Rotate-1"
+                  : ""
+                ).toString()}
               >
-                +
-              </button>
+                <h2>Went Well</h2>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-lg"
+                  onClick={() => this.CreateNote("Went Well", "")}
+                >
+                  +
+                </button>
+              </div>
               {this.state.Notes.map((note, idx) => {
                 if (note.type === "Went Well") {
                   return (
@@ -120,11 +201,17 @@ class App extends Component {
                       idx={idx}
                       identifier={note.id}
                       value={note.input}
+                      thumbsupcount={note.thumbsup}
+                      thumbsdowncount={note.thumbsdown}
                       setUserInput={this.setUserInput}
                       validateInput={this.validateInput}
                       MoveLeft={this.MoveLeft}
                       Delete={this.Delete}
                       MoveRight={this.MoveRight}
+                      Thumbsup={this.Thumbsup}
+                      Thumbsdown={this.Thumbsdown}
+                      Layouttoggle={this.state.Layouttoggle}
+                      color={"bg-success"}
                     />
                   );
                 } else {
@@ -132,16 +219,22 @@ class App extends Component {
                 }
               })}
             </div>
-            <div className="col-sm">
-              <h2>To Improve</h2>
-              <button
-                type="button"
-                className="btn btn-primary btn-lg"
-                onClick={() => this.CreateNote("To Improve", "")}
+            <div className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}>
+              <div
+                className={(this.state.Layouttoggle === 1
+                  ? " Rotate-1"
+                  : ""
+                ).toString()}
               >
-                +
-                <i className="fa fa-search" />
-              </button>
+                <h2>To Improve</h2>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-lg"
+                  onClick={() => this.CreateNote("To Improve", "")}
+                >
+                  +
+                </button>
+              </div>
               {this.state.Notes.map((note, idx) => {
                 if (note.type === "To Improve") {
                   return (
@@ -150,11 +243,17 @@ class App extends Component {
                       idx={idx}
                       identifier={note.id}
                       value={note.input}
+                      thumbsupcount={note.thumbsup}
+                      thumbsdowncount={note.thumbsdown}
                       setUserInput={this.setUserInput}
                       validateInput={this.validateInput}
                       MoveLeft={this.MoveLeft}
                       Delete={this.Delete}
                       MoveRight={this.MoveRight}
+                      Thumbsup={this.Thumbsup}
+                      Thumbsdown={this.Thumbsdown}
+                      Layouttoggle={this.state.Layouttoggle}
+                      color={"bg-warning"}
                     />
                   );
                 } else {
@@ -162,15 +261,22 @@ class App extends Component {
                 }
               })}
             </div>
-            <div className="col-sm">
-              <h2>Action Items</h2>
-              <button
-                type="button"
-                className="btn btn-primary btn-lg"
-                onClick={() => this.CreateNote("Action Items", "")}
+            <div className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}>
+              <div
+                className={(this.state.Layouttoggle === 1
+                  ? " Rotate-1"
+                  : ""
+                ).toString()}
               >
-                +
-              </button>
+                <h2>Action Items</h2>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-lg"
+                  onClick={() => this.CreateNote("Action Items", "")}
+                >
+                  +
+                </button>
+              </div>
               {this.state.Notes.map((note, idx) => {
                 if (note.type === "Action Items") {
                   return (
@@ -179,11 +285,17 @@ class App extends Component {
                       idx={idx}
                       identifier={note.id}
                       value={note.input}
+                      thumbsupcount={note.thumbsup}
+                      thumbsdowncount={note.thumbsdown}
                       setUserInput={this.setUserInput}
                       validateInput={this.validateInput}
                       MoveLeft={this.MoveLeft}
                       Delete={this.Delete}
                       MoveRight={this.MoveRight}
+                      Thumbsup={this.Thumbsup}
+                      Thumbsdown={this.Thumbsdown}
+                      Layouttoggle={this.state.Layouttoggle}
+                      color={"bg-danger"}
                     />
                   );
                 } else {
