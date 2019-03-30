@@ -25,8 +25,12 @@ Then cd into the retro-board directory and run `yarn install` followed by `yarn 
 
 ## Versioning
 
-We use [GitHub](http://github.com/) for versioning. For the versions available, see the [tags on this repository](https://github.com/ahijazi11/retro-board/tags).
+[GitHub](http://github.com/) was used for versioning. For the versions available, see the [tags on this repository](https://github.com/ahijazi11/retro-board/tags).
 
 ## Author
 
 **Ahmad Hijazi**
+
+## Acknowledgements
+
+This project wouldn't have been completed without the guidance of Matina Patsos & Jamal Taylor. Thank you for all the time and help!
