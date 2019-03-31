@@ -4,7 +4,11 @@ import Notes from "./Notes";
 
 function Note(props) {
   return (
-    <div className={"card mt-1 mb-2 mr-1 ml-1 " + props.color}>
+    <div
+      className={"card mt-1 mb-2 mr-1 ml-1 " + props.color}
+      draggable
+      onDragStart={e => props.onDragStart(e, props.identifier, props.idx)}
+    >
       <br />
       <input
         type="text"
@@ -151,6 +155,28 @@ class App extends Component {
       this.setState({ Layouttoggle: this.state.Layouttoggle + 1 });
     }
   };
+
+  onDragOver = e => e.preventDefault();
+
+  onDragStart = (e, id, idx) => {
+    e.dataTransfer.setData("id", id);
+    e.dataTransfer.setData("idx", idx);
+  };
+
+  onDrop = (e, cat) => {
+    let DummyNotes = [...this.state.Notes];
+    let id = parseInt(e.dataTransfer.getData("id"));
+    let idx = e.dataTransfer.getData("idx");
+    for (let note of DummyNotes) {
+      if (note.id === id) {
+        note.type = cat;
+      }
+    }
+    DummyNotes.push(DummyNotes[idx]); //This and one line below to render moved card at bottom of destination column
+    DummyNotes.splice(idx, 1);
+    this.setState({ Notes: DummyNotes });
+  };
+
   render() {
     return (
       <div>
@@ -177,7 +203,11 @@ class App extends Component {
                 : "row"
             }
           >
-            <div className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}>
+            <div
+              className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}
+              onDragOver={this.onDragOver}
+              onDrop={e => this.onDrop(e, "Went Well")}
+            >
               <div
                 className={(this.state.Layouttoggle === 1
                   ? " Rotate-1"
@@ -212,6 +242,7 @@ class App extends Component {
                       Thumbsdown={this.Thumbsdown}
                       Layouttoggle={this.state.Layouttoggle}
                       color={"bg-success"}
+                      onDragStart={this.onDragStart}
                     />
                   );
                 } else {
@@ -219,7 +250,11 @@ class App extends Component {
                 }
               })}
             </div>
-            <div className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}>
+            <div
+              className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}
+              onDragOver={this.onDragOver}
+              onDrop={e => this.onDrop(e, "To Improve")}
+            >
               <div
                 className={(this.state.Layouttoggle === 1
                   ? " Rotate-1"
@@ -254,6 +289,7 @@ class App extends Component {
                       Thumbsdown={this.Thumbsdown}
                       Layouttoggle={this.state.Layouttoggle}
                       color={"bg-warning"}
+                      onDragStart={this.onDragStart}
                     />
                   );
                 } else {
@@ -261,7 +297,11 @@ class App extends Component {
                 }
               })}
             </div>
-            <div className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}>
+            <div
+              className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}
+              onDragOver={this.onDragOver}
+              onDrop={e => this.onDrop(e, "Action Items")}
+            >
               <div
                 className={(this.state.Layouttoggle === 1
                   ? " Rotate-1"
@@ -296,6 +336,7 @@ class App extends Component {
                       Thumbsdown={this.Thumbsdown}
                       Layouttoggle={this.state.Layouttoggle}
                       color={"bg-danger"}
+                      onDragStart={this.onDragStart}
                     />
                   );
                 } else {
