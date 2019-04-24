@@ -41,7 +41,7 @@ function Category(props) {
             />
           );
         } else {
-          return null;
+          return false;
         }
       })}
     </div>
