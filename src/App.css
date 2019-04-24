@@ -4,9 +4,18 @@ input {
 }
 
 .Rotate-1 {
-  transform: rotate(-90deg);
+  min-width: 120px;
+  max-width: 120px;
 }
 
 .Rotate-2 {
   transform: rotate(90deg);
+}
+
+.row {
+  flex-wrap: nowrap;
+}
+
+.card {
+  min-width: 250px;
 }

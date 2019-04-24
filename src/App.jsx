@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import Note from "./Note";
+import Category from "./Category";
 
 class App extends Component {
   state = {
@@ -146,147 +146,57 @@ class App extends Component {
                 : "row"
             }
           >
-            <div
-              className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}
+            <Category
+              notetype="Went Well"
+              color="bg-success"
+              Layouttoggle={this.state.Layouttoggle}
               onDragOver={this.onDragOver}
-              onDrop={e => this.onDrop(e, "Went Well")}
-            >
-              <div
-                className={(this.state.Layouttoggle === 1
-                  ? " Rotate-1"
-                  : ""
-                ).toString()}
-              >
-                <h2>Went Well</h2>
-                <button
-                  type="button"
-                  className="btn btn-primary btn-lg"
-                  onClick={() => this.CreateNote("Went Well", "")}
-                >
-                  +
-                </button>
-              </div>
-              {this.state.Notes.map((note, idx) => {
-                if (note.type === "Went Well") {
-                  return (
-                    <Note
-                      key={"Went Well" + idx}
-                      idx={idx}
-                      identifier={note.id}
-                      value={note.input}
-                      thumbsupcount={note.thumbsup}
-                      thumbsdowncount={note.thumbsdown}
-                      setUserInput={this.setUserInput}
-                      validateInput={this.validateInput}
-                      MoveLeft={this.MoveLeft}
-                      Delete={this.Delete}
-                      MoveRight={this.MoveRight}
-                      Thumbsup={this.Thumbsup}
-                      Thumbsdown={this.Thumbsdown}
-                      Layouttoggle={this.state.Layouttoggle}
-                      color={"bg-success"}
-                      onDragStart={this.onDragStart}
-                    />
-                  );
-                } else {
-                  return null;
-                }
-              })}
-            </div>
-            <div
-              className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}
+              onDrop={this.onDrop}
+              CreateNote={this.CreateNote}
+              Notes={this.state.Notes}
+              setUserInput={this.setUserInput}
+              validateInput={this.validateInput}
+              MoveLeft={this.MoveLeft}
+              Delete={this.Delete}
+              MoveRight={this.MoveRight}
+              Thumbsup={this.Thumbsup}
+              Thumbsdown={this.Thumbsdown}
+              onDragStart={this.onDragStart}
+            />
+            <Category
+              notetype="To Improve"
+              color="bg-warning"
+              Layouttoggle={this.state.Layouttoggle}
               onDragOver={this.onDragOver}
-              onDrop={e => this.onDrop(e, "To Improve")}
-            >
-              <div
-                className={(this.state.Layouttoggle === 1
-                  ? " Rotate-1"
-                  : ""
-                ).toString()}
-              >
-                <h2>To Improve</h2>
-                <button
-                  type="button"
-                  className="btn btn-primary btn-lg"
-                  onClick={() => this.CreateNote("To Improve", "")}
-                >
-                  +
-                </button>
-              </div>
-              {this.state.Notes.map((note, idx) => {
-                if (note.type === "To Improve") {
-                  return (
-                    <Note
-                      key={"To Improve" + idx}
-                      idx={idx}
-                      identifier={note.id}
-                      value={note.input}
-                      thumbsupcount={note.thumbsup}
-                      thumbsdowncount={note.thumbsdown}
-                      setUserInput={this.setUserInput}
-                      validateInput={this.validateInput}
-                      MoveLeft={this.MoveLeft}
-                      Delete={this.Delete}
-                      MoveRight={this.MoveRight}
-                      Thumbsup={this.Thumbsup}
-                      Thumbsdown={this.Thumbsdown}
-                      Layouttoggle={this.state.Layouttoggle}
-                      color={"bg-warning"}
-                      onDragStart={this.onDragStart}
-                    />
-                  );
-                } else {
-                  return null;
-                }
-              })}
-            </div>
-            <div
-              className={this.state.Layouttoggle === 1 ? "row mb-5" : "col"}
+              onDrop={this.onDrop}
+              CreateNote={this.CreateNote}
+              Notes={this.state.Notes}
+              setUserInput={this.setUserInput}
+              validateInput={this.validateInput}
+              MoveLeft={this.MoveLeft}
+              Delete={this.Delete}
+              MoveRight={this.MoveRight}
+              Thumbsup={this.Thumbsup}
+              Thumbsdown={this.Thumbsdown}
+              onDragStart={this.onDragStart}
+            />
+            <Category
+              notetype="Action Items"
+              color="bg-danger"
+              Layouttoggle={this.state.Layouttoggle}
               onDragOver={this.onDragOver}
-              onDrop={e => this.onDrop(e, "Action Items")}
-            >
-              <div
-                className={(this.state.Layouttoggle === 1
-                  ? " Rotate-1"
-                  : ""
-                ).toString()}
-              >
-                <h2>Action Items</h2>
-                <button
-                  type="button"
-                  className="btn btn-primary btn-lg"
-                  onClick={() => this.CreateNote("Action Items", "")}
-                >
-                  +
-                </button>
-              </div>
-              {this.state.Notes.map((note, idx) => {
-                if (note.type === "Action Items") {
-                  return (
-                    <Note
-                      key={"Action Items" + idx}
-                      idx={idx}
-                      identifier={note.id}
-                      value={note.input}
-                      thumbsupcount={note.thumbsup}
-                      thumbsdowncount={note.thumbsdown}
-                      setUserInput={this.setUserInput}
-                      validateInput={this.validateInput}
-                      MoveLeft={this.MoveLeft}
-                      Delete={this.Delete}
-                      MoveRight={this.MoveRight}
-                      Thumbsup={this.Thumbsup}
-                      Thumbsdown={this.Thumbsdown}
-                      Layouttoggle={this.state.Layouttoggle}
-                      color={"bg-danger"}
-                      onDragStart={this.onDragStart}
-                    />
-                  );
-                } else {
-                  return null;
-                }
-              })}
-            </div>
+              onDrop={this.onDrop}
+              CreateNote={this.CreateNote}
+              Notes={this.state.Notes}
+              setUserInput={this.setUserInput}
+              validateInput={this.validateInput}
+              MoveLeft={this.MoveLeft}
+              Delete={this.Delete}
+              MoveRight={this.MoveRight}
+              Thumbsup={this.Thumbsup}
+              Thumbsdown={this.Thumbsdown}
+              onDragStart={this.onDragStart}
+            />
           </div>
         </div>
       </div>
